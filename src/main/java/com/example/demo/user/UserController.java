@@ -68,15 +68,15 @@ public class UserController {
         String month = request.get("month");
 
         if(request.get("time").equals("weekly")){
-           // Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
-            //finalChart = weeklyChart.generateChart(lista);
-            WeeklyChart weeklyChart = new WeeklyChart(week);
+            Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
             finalChart = weeklyChart.generateChart(lista);
+            //WeeklyChart weeklyChart = new WeeklyChart(week);
+            //finalChart = weeklyChart.generateChart(lista);
         }else if(request.get("time").equals("monthly")){
-           // Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
-           // finalChart = monthlyChart.generateChart(lista);
-            MonthlyChart monthlyChart = new MonthlyChart(month);
+            Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
             finalChart = monthlyChart.generateChart(lista);
+           // MonthlyChart monthlyChart = new MonthlyChart(month);
+           // finalChart = monthlyChart.generateChart(lista);
         }
 
 
