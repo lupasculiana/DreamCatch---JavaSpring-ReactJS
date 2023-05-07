@@ -61,37 +61,26 @@ public class UserController {
     public @ResponseBody byte[] createWeekOrMonthChart(@RequestBody Map<String, String> request,
                                                        @PathVariable("userId")Long userId) throws IOException, ParseException {
 
-        // selectare intrari in functie de tag
-        //Request-month,tag,time, week
         List<Dream> lista = userService.generateChartData(request.get("tag"),userId);
 
         JFreeChart finalChart = null;
-
-        // datele venite din frontend pe care le pasam la Strategy Method
-
         String week = request.get("week");
         String month = request.get("month");
 
         if(request.get("time").equals("weekly")){
-           //Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
-
-            //System.out.println("\nWeekly chart");
-           // finalChart = weeklyChart.generateChart(lista);
+           // Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
+            //finalChart = weeklyChart.generateChart(lista);
             WeeklyChart weeklyChart = new WeeklyChart(week);
             finalChart = weeklyChart.generateChart(lista);
         }else if(request.get("time").equals("monthly")){
            // Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
-
-           // System.out.println("\nMonthly chart");
-            //finalChart = monthlyChart.generateChart(lista);
+           // finalChart = monthlyChart.generateChart(lista);
             MonthlyChart monthlyChart = new MonthlyChart(month);
             finalChart = monthlyChart.generateChart(lista);
         }
 
-        // Create a buffered image of the chart
-        BufferedImage image = finalChart.createBufferedImage(800, 600);
 
-        // Convert the image to a byte array
+        BufferedImage image = finalChart.createBufferedImage(800, 600);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(image, "png", baos);
         byte[] bytes = baos.toByteArray();
