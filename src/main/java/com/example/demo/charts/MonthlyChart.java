@@ -36,7 +36,21 @@ public class MonthlyChart implements Chart {
         }
         CategoryPlot energyPlot = new CategoryPlot();
         energyPlot.setDataset(0, energyDataset);
+        BarRenderer energyRenderer = new BarRenderer() {
+            @Override
+            public Paint getItemPaint(int row, int column) {
+                double value = energyDataset.getValue(row, column).doubleValue();
+                if (value < 3) {
+                    return Color.GREEN;
+                } else {
+                    return Color.RED;
+                }
+            }
+        };
+
+        energyPlot.setRenderer(0, energyRenderer);
         energyPlot.setRangeAxis(0, new NumberAxis("Energy"));
+
 
 
         DefaultCategoryDataset stressDataset = new DefaultCategoryDataset();
@@ -47,7 +61,20 @@ public class MonthlyChart implements Chart {
         }
         CategoryPlot stressPlot = new CategoryPlot();
         stressPlot.setDataset(0, stressDataset);
+        BarRenderer stressRenderer = new BarRenderer() {
+            @Override
+            public Paint getItemPaint(int row, int col) {
+                double value = stressDataset.getValue(row, col).doubleValue();
+                if (value < 2) {
+                    return Color.RED;
+                } else {
+                    return Color.GREEN;
+                }
+            }
+        };
+        stressPlot.setRenderer(0, stressRenderer);
         stressPlot.setRangeAxis(0, new NumberAxis("Stress"));
+
 
 
         DefaultCategoryDataset durationDataset = new DefaultCategoryDataset();
@@ -58,6 +85,18 @@ public class MonthlyChart implements Chart {
         }
         CategoryPlot durationPlot = new CategoryPlot();
         durationPlot.setDataset(0, durationDataset);
+        BarRenderer durationRenderer = new BarRenderer() {
+            @Override
+            public Paint getItemPaint(int row, int col) {
+                double value = durationDataset.getValue(row, col).doubleValue();
+                if (value < 4) {
+                    return Color.RED;
+                } else {
+                    return Color.GREEN;
+                }
+            }
+        };
+        durationPlot.setRenderer(0, durationRenderer);
         durationPlot.setRangeAxis(0, new NumberAxis("Duration"));
 
         CombinedDomainCategoryPlot combinedPlot = new CombinedDomainCategoryPlot();

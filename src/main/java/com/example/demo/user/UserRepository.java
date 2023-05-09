@@ -6,11 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-//responsible for data access
+ //responsible for data access
 public interface UserRepository
         extends JpaRepository<Login, Long> {
 //SELECT * FROM user WHERE username = ?
-    @Query("SELECT s FROM Login s WHERE s.username = ?1")
-    Optional<Login> findLoginByUsername(String username);
+    @Query("SELECT s FROM Login s WHERE s.id = ?1")
+    Optional<Login> findLoginByUsername(String id);
 }

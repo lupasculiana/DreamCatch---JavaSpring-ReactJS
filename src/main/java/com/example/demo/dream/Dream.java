@@ -26,6 +26,7 @@ public class Dream {
             generator = "dream_sequence"
     )
     private Long pid;
+    private Long userId;
     private String description;
     private String tag;
     private int duration;
@@ -74,4 +75,7 @@ public class Dream {
         this.stress = stress;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
 }

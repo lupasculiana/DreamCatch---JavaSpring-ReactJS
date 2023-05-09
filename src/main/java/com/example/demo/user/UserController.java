@@ -1,10 +1,10 @@
 package com.example.demo.user;
 
-import com.example.demo.charts.Chart;
 import com.example.demo.charts.MonthlyChart;
-import com.example.demo.charts.RedChartDecorator;
 import com.example.demo.charts.WeeklyChart;
+import com.example.demo.command.api.CreateDreamCommand;
 import com.example.demo.dream.Dream;
+import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,8 +22,15 @@ import java.util.Map;
 @RequestMapping(path="api/v1/login")
 @CrossOrigin()
 public class UserController {
-
+    private CommandGateway commandGateway;
     private final UserService userService;
+
+    public UserController(CommandGateway commandGateway) {
+        this.commandGateway = commandGateway;
+        userService = null;
+    }
+
+
 
     @Autowired
     public UserController(UserService userService){
@@ -41,9 +48,22 @@ public class UserController {
     }
 
 
+
     @PostMapping
-    public void registerNewUser(@RequestBody Login user){
-        userService.addNewUser(user);
+    public void registerNewDream(@RequestBody Dream dream){
+        CreateDreamCommand createDreamCommand =
+            CreateDreamCommand.builder()
+                    .pid(dream.getPid())
+                    .description(dream.getDescription())
+                    .energyLevel(dream.getEnergyLevel())
+                    .duration(dream.getDuration())
+                    .stress(dream.getStress())
+                    .month(dream.getMonth())
+                    .week(dream.getWeek())
+                    .tag(dream.getTag())
+                    .build();
+        String result = commandGateway.sendAndWait(createDreamCommand);
+        System.out.println(result);
     }
 
     @DeleteMapping(path = "{userId}")
@@ -54,7 +74,20 @@ public class UserController {
     @PutMapping(path = "{userId}")
     public void updateStudent(@RequestBody Dream dream,
                               @PathVariable("userId")Long userId) {
-        userService.updateUser(userId,dream);
+       // userService.updateUser(userId,dream);
+        CreateDreamCommand createDreamCommand =
+                CreateDreamCommand.builder()
+                        .pid(dream.getPid())
+                        .description(dream.getDescription())
+                        .energyLevel(dream.getEnergyLevel())
+                        .duration(dream.getDuration())
+                        .stress(dream.getStress())
+                        .month(dream.getMonth())
+                        .week(dream.getWeek())
+                        .tag(dream.getTag())
+                        .build();
+        String result = commandGateway.sendAndWait(createDreamCommand);
+        System.out.println(result);
     }
 
     @PostMapping(produces = MediaType.IMAGE_PNG_VALUE,path = "{userId}")
@@ -68,15 +101,15 @@ public class UserController {
         String month = request.get("month");
 
         if(request.get("time").equals("weekly")){
-            Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
+           // Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
+           // finalChart = weeklyChart.generateChart(lista);
+            WeeklyChart weeklyChart = new WeeklyChart(week);
             finalChart = weeklyChart.generateChart(lista);
-            //WeeklyChart weeklyChart = new WeeklyChart(week);
-            //finalChart = weeklyChart.generateChart(lista);
         }else if(request.get("time").equals("monthly")){
-            Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
-            finalChart = monthlyChart.generateChart(lista);
-           // MonthlyChart monthlyChart = new MonthlyChart(month);
+           // Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
            // finalChart = monthlyChart.generateChart(lista);
+            MonthlyChart monthlyChart = new MonthlyChart(month);
+            finalChart = monthlyChart.generateChart(lista);
         }
 
 
