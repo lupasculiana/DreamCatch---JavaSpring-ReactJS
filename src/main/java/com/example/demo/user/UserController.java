@@ -49,22 +49,16 @@ public class UserController {
 
 
 
-    @PostMapping
-    public void registerNewDream(@RequestBody Dream dream){
-        CreateDreamCommand createDreamCommand =
-            CreateDreamCommand.builder()
-                    .pid(dream.getPid())
-                    .description(dream.getDescription())
-                    .energyLevel(dream.getEnergyLevel())
-                    .duration(dream.getDuration())
-                    .stress(dream.getStress())
-                    .month(dream.getMonth())
-                    .week(dream.getWeek())
-                    .tag(dream.getTag())
-                    .build();
-        String result = commandGateway.sendAndWait(createDreamCommand);
+   /* @PostMapping
+    public void registerNewUser(@RequestBody Login login){
+        CreateEventCommand createEventCommand =
+                CreateEventCommand.builder().id(login.getId())
+                        .username(login.getUsername())
+                        .password(login.getPassword())
+                        .build();
+        String result = commandGateway.sendAndWait(createEventCommand);
         System.out.println(result);
-    }
+    }*/
 
     @DeleteMapping(path = "{userId}")
     public void deleteStudent(@PathVariable("userId") Long userId){
