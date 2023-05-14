@@ -1,6 +1,8 @@
 package com.example.demo.user;
 
+import com.example.demo.charts.Chart;
 import com.example.demo.charts.MonthlyChart;
+import com.example.demo.charts.RedChartDecorator;
 import com.example.demo.charts.WeeklyChart;
 import com.example.demo.command.api.CreateDreamCommand;
 import com.example.demo.dream.Dream;
@@ -47,19 +49,6 @@ public class UserController {
         return userService.getDreams(userId);
     }
 
-
-
-   /* @PostMapping
-    public void registerNewUser(@RequestBody Login login){
-        CreateEventCommand createEventCommand =
-                CreateEventCommand.builder().id(login.getId())
-                        .username(login.getUsername())
-                        .password(login.getPassword())
-                        .build();
-        String result = commandGateway.sendAndWait(createEventCommand);
-        System.out.println(result);
-    }*/
-
     @DeleteMapping(path = "{userId}")
     public void deleteStudent(@PathVariable("userId") Long userId){
         userService.deleteStudent(userId);
@@ -68,7 +57,7 @@ public class UserController {
     @PutMapping(path = "{userId}")
     public void updateStudent(@RequestBody Dream dream,
                               @PathVariable("userId")Long userId) {
-       // userService.updateUser(userId,dream);
+      // userService.updateUser(userId,dream);
         CreateDreamCommand createDreamCommand =
                 CreateDreamCommand.builder()
                         .pid(dream.getPid())
@@ -95,15 +84,12 @@ public class UserController {
         String month = request.get("month");
 
         if(request.get("time").equals("weekly")){
-           // Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
-           // finalChart = weeklyChart.generateChart(lista);
-            WeeklyChart weeklyChart = new WeeklyChart(week);
+            Chart weeklyChart = new RedChartDecorator(new WeeklyChart(week));
             finalChart = weeklyChart.generateChart(lista);
         }else if(request.get("time").equals("monthly")){
-           // Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
-           // finalChart = monthlyChart.generateChart(lista);
-            MonthlyChart monthlyChart = new MonthlyChart(month);
-            finalChart = monthlyChart.generateChart(lista);
+           Chart monthlyChart = new RedChartDecorator(new MonthlyChart(month));
+           finalChart = monthlyChart.generateChart(lista);
+
         }
 
 
@@ -114,8 +100,4 @@ public class UserController {
          
         return bytes;
     }
-   /* @PostMapping
-    public void registerNewDream(@RequestBody Login user, @RequestBody Dream dream){
-        userService.addNewDream(dream,user);
-    }*/
 }
